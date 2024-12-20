@@ -8,6 +8,7 @@ const tourRouter = require("./routes/tourRouter");
 const userRouter = require("./routes/userRouter");
 const reviewRouter = require("./routes/reviewRouter");
 const bookingRouter = require("./routes/bookingRouter");
+const bookingController = require("./controllers/bookingController");
 const viewRouter = require("./routes/viewRoutes");
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
@@ -18,6 +19,7 @@ const hpp = require("hpp");
 const path = require("path");
 const { title } = require("process");
 const compression = require("compression");
+const cors = require("cors");
 
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
@@ -37,6 +39,10 @@ app.use(express.static(path.join(__dirname, "public")));
 //   })
 // );
 
+app.use(cors());
+
+app.options("*", cors());
+
 app.enable("trust proxy");
 
 // works for text
@@ -44,6 +50,12 @@ app.use(compression());
 
 // Development logging
 app.use(morgan("dev"));
+
+app.post(
+  "/webhooks-checkout",
+  express.raw({ type: "application/json" }),
+  bookingController.webhookCheckout
+);
 
 // Middleware to parse JSON bodies
 app.use(express.json({ limit: "10kb" }));
