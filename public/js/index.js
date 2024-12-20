@@ -24,7 +24,7 @@ if (loginForm) {
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    console.log(email, password);
+    // console.log(email, password);
     login(email, password);
   });
 }
@@ -56,7 +56,7 @@ if (updateDataForm) {
     form.append("name", document.getElementById("name").value);
     form.append("email", document.getElementById("email").value);
     form.append("photo", document.getElementById("photo").files[0]);
-    console.log(form);
+    // console.log(form);
     await updateSettings(form, "Account Details");
   });
 }
@@ -93,7 +93,7 @@ if (reviewForm) {
 
     // Fetch the tourId from the data attribute
     const tourId = submitButton.dataset.tourId; // Fetch from the button's `data-tour-id`
-    console.log("Tour ID:", tourId);
+    // console.log("Tour ID:", tourId);
 
     if (!tourId) {
       console.error("Tour ID is undefined!");

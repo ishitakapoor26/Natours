@@ -17,6 +17,7 @@ const xss = require("xss-clean");
 const hpp = require("hpp");
 const path = require("path");
 const { title } = require("process");
+const compression = require("compression");
 
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
@@ -35,6 +36,9 @@ app.use(express.static(path.join(__dirname, "public")));
 //     },
 //   })
 // );
+
+// works for text
+app.use(compression());
 
 // Development logging
 app.use(morgan("dev"));

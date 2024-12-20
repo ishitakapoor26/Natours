@@ -84,7 +84,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-  console.log(token);
+  // console.log(token);
 
   if (!token) {
     return next(
@@ -96,7 +96,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  console.log(decoded);
+  // console.log(decoded);
 
   // check if user exists
 
@@ -136,7 +136,7 @@ exports.isLoggedIn = async (req, res, next) => {
         process.env.JWT_SECRET
       );
 
-      console.log(decoded);
+      // console.log(decoded);
 
       // check if user exists
 

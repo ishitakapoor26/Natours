@@ -27,7 +27,7 @@ exports.getTours = catchAsync(async (req, res, next) => {
       fields: "user tour",
     });
 
-  console.log(tour);
+  // console.log(tour);
 
   if (!tour) {
     return next(new AppError("There is no tour with that name", 404));

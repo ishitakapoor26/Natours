@@ -11,7 +11,7 @@ export const addReview = async (tourId, review, rating) => {
         rating,
       },
     });
-    console.log(res);
+    // console.log(res);
     if (res.status === 201) {
       showAlert("success", "Review posted successfully!");
       window.setTimeout(() => {

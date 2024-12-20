@@ -3,8 +3,8 @@ const app = require("./app");
 const mongoose = require("mongoose");
 
 process.on("uncaughtException", (err) => {
-  console.log("Shutting down....");
-  console.log(err);
+  // console.log("Shutting down....");
+  // console.log(err);
   process.exit(1);
 });
 
