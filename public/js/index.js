@@ -3,6 +3,7 @@ import { displayMap } from "./mapbox";
 import { updateSettings } from "./updateSettings";
 import { bookTour } from "./stripe";
 import { addReview } from "./review";
+import { showAlert } from "./alerts";
 
 // DOM elements
 const mapBox = document.getElementById("map");
@@ -111,3 +112,6 @@ if (reviewForm) {
     await addReview(tourId, review, rating);
   });
 }
+
+const alertMessage = document.querySelector("body").dataset.alert;
+if (alert) showAlert("success", alertMessage);
