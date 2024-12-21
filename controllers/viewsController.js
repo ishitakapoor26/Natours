@@ -13,6 +13,7 @@ exports.getOverview = catchAsync(async (req, res, next) => {
   res.status(200).render("overview", {
     title: "Exciting tours for adventurous people",
     tours,
+    manageTour: "false",
   });
 });
 
@@ -113,4 +114,13 @@ exports.alerts = (req, res, next) => {
     res.locals.alert =
       "Your booking was successful! Please check your email for confirmation.";
   next();
+};
+
+exports.manageTours = async (req, res, next) => {
+  const tours = await Tour.find();
+  res.status(200).render("overview", {
+    title: "Manage Tours | Admin Portal",
+    tours,
+    manageTour: "true",
+  });
 };

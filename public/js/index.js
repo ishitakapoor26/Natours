@@ -4,6 +4,7 @@ import { updateSettings } from "./updateSettings";
 import { bookTour } from "./stripe";
 import { addReview } from "./review";
 import { showAlert } from "./alerts";
+import { deleteTour } from "./manageTour";
 
 // DOM elements
 const mapBox = document.getElementById("map");
@@ -14,6 +15,15 @@ const updatePasswordForm = document.querySelector(".form-user-password");
 const logoutBtn = document.querySelector(".nav__el--logout");
 const bookBtn = document.getElementById("book-tour");
 const reviewForm = document.querySelector(".form--review");
+
+document.addEventListener("click", async (e) => {
+  const deleteIcon = e.target.closest("#deleteTour");
+  if (deleteIcon) {
+    const tourId = deleteIcon.dataset.tourId;
+    console.log("Tour ID:", tourId);
+    if (tourId) await deleteTour(deleteIcon, tourId);
+  }
+});
 
 if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations);

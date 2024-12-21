@@ -18,6 +18,8 @@ router.get("/me", authController.protect, viewController.getAccount);
 
 router.get("/my-tours", authController.protect, viewController.getMyTours);
 
+router.get("/manage-tours", authController.protect, viewController.manageTours);
+
 router.get("/my-reviews", authController.protect, viewController.getMyReviews);
 
 router.post(
