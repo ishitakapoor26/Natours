@@ -5,7 +5,7 @@ block content
   section.section-cta 
     .login-form(style='max-width: 106rem;')
       h2.heading-secondary.ma-bt-lg CREATE A NEW TOUR
-      form.form.form--login
+      form.form.form--createTour
         .form__group
           label.form__label(for='name') Tour Name
           input#tour-name.form__input(type='text', placeholder='For eg. The Mountain Explorer', required)
@@ -28,28 +28,25 @@ block content
           label.form__label(for='group-size') Tour Group Size
           input#tour-groupSize.form__input(type='number', required)
         .form__group.ma-bt-md
-          label.form__label(for='ratings') Tour Rating
-          input#tour-rating.form__input(type='number', required)
+          label.form__label(for='tour-cover-image') Tour Cover Image
+          input#tour-cover-image.form__input(type='file', accept="image/*", required)
+
         .form__group.ma-bt-md
-          label.form__label(for='address') Tour Address
-          input#tour-address.form__input(type='text', required)
-        .form__group.ma-bt-md
-          label.form__label(for='address_desc') Address Description
-          input#address__descrip.form__input(type='text', required)
-        .form__group.ma-bt-md
-          label.form__label(for='coordinates') Tour Coordinates
-          input#tour-coordinates.form__input(type='text', required)
-        .form__group.ma-bt-md
-          label.form__label(for='image-cover') Tour Thumbnail
-          input#tour-coverImg.form__input(type='file', accept= 'image/*',required)
-        .form__group.ma-bt-md
-          label.form__label(for='images') Tour Images (Upload upto 3 images)
-          input#tour-imgs.form__input(type='file', accept= 'image/*',required)
+          label.form__label(for='tour-images') Tour Images
+          input#tour-images.form__input(type='file', accept="image/*", multiple required)
+
+        
         // Locations Wrapper
         .form__group.ma-bt-md
           label.form__label Tour Locations
           #locations-wrapper
           button.btn.btn--green(type='button', id='add-location') Add Location
+
+        // Start Dates Wrapper
+        .form__group.ma-bt-md
+          label.form__label Start Dates
+          #dates-wrapper
+          button.btn.btn--green(type='button', id='add-dates') Add Start Dates
 
         .form__group
           button.btn.btn--green Add Tour

@@ -130,3 +130,5 @@ exports.addTours = async (req, res, next) => {
     title: "Manage Tours | Add Tour",
   });
 };
+
+exports.updateTours = async (req, res, next) => {};

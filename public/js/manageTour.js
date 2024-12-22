@@ -30,3 +30,23 @@ export const deleteTour = async (deleteIcon, tourId) => {
     showAlert("error", err.response.data.message);
   }
 };
+
+export const createTour = async (data) => {
+  try {
+    // console.log(data);
+    const res = await axios({
+      method: "POST",
+      url: "/api/v1/tours/",
+      data,
+    });
+    console.log(res);
+    if (res.status === 201) {
+      showAlert("success", "Tour Created Successfully!");
+      window.setTimeout(() => {
+        location.assign("/");
+      }, 1500);
+    }
+  } catch (err) {
+    showAlert("error", err.response.data.message);
+  }
+};

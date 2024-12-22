@@ -23,7 +23,7 @@ const createSendToken = (user, statusCode, req, res) => {
     secure: req.secure || req.headers["x-forwarded-proto"] === "https",
   };
 
-  // console.log(cookieOptions.expires);
+  console.log(cookieOptions.expires);
 
   res.cookie("jwt", token, cookieOptions);
 
@@ -47,7 +47,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
   });
   const url = `${req.protocol}://${req.get("host")}/me`;
-  // console.log(url);
+  console.log(url);
   await new Email(newUser, url).sendWelcome();
   createSendToken(newUser, 201, req, res);
 });
@@ -84,7 +84,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-  // console.log(token);
+  console.log(token);
 
   if (!token) {
     return next(
@@ -96,7 +96,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  // console.log(decoded);
+  console.log(decoded);
 
   // check if user exists
 
@@ -136,7 +136,7 @@ exports.isLoggedIn = async (req, res, next) => {
         process.env.JWT_SECRET
       );
 
-      // console.log(decoded);
+      console.log(decoded);
 
       // check if user exists
 

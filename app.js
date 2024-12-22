@@ -43,7 +43,7 @@ app.use(cors());
 
 app.options("*", cors());
 
-app.enable("trust proxy");
+// app.enable("trust proxy");
 
 // works for text
 app.use(compression());

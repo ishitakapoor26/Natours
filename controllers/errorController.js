@@ -10,7 +10,7 @@ const handleDuplicateErrorDB = (err) => {
   if (err.errmsg) {
     const match = err.errmsg.match(/(["'])(\\?.)*?\1/);
     if (match) {
-      // console.log(match);
+      console.log(match);
       value = match[0];
     }
   }
@@ -73,7 +73,7 @@ const sendErrorProd = (err, req, res) => {
   // B) RENDERED WEBSITE
   // A) Operational, trusted error: send message to client
   if (err.isOperational) {
-    // console.log(err);
+    console.log(err);
     return res.status(err.statusCode).render("error", {
       title: "Something went wrong!",
       msg: err.message,
@@ -96,7 +96,7 @@ const handleJWTExpiredError = (err) =>
   new AppError("Your token has expired! Please log in again.");
 
 module.exports = (err, req, res, next) => {
-  // console.log(err.stack);
+  console.log(err.stack);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
