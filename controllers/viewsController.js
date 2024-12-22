@@ -124,3 +124,9 @@ exports.manageTours = async (req, res, next) => {
     manageTour: "true",
   });
 };
+
+exports.addTours = async (req, res, next) => {
+  res.status(200).render("createTour", {
+    title: "Manage Tours | Add Tour",
+  });
+};

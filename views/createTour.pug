@@ -1,0 +1,55 @@
+extends base
+
+block content
+
+  section.section-cta 
+    .login-form(style='max-width: 106rem;')
+      h2.heading-secondary.ma-bt-lg CREATE A NEW TOUR
+      form.form.form--login
+        .form__group
+          label.form__label(for='name') Tour Name
+          input#tour-name.form__input(type='text', placeholder='For eg. The Mountain Explorer', required)
+        .form__group.ma-bt-md
+          label.form__label(for='summary') Tour Summary
+          textarea#tour-summary.form__input(type='text', required, name="summary", cols="30", rows="10")
+        .form__group.ma-bt-md
+          label.form__label(for='description') Tour Description
+          textarea#tour-description.form__input(type='text', required, name="description", cols="30", rows="10")
+        .form__group.ma-bt-md
+          label.form__label(for='difficulty') Tour Difficulty
+          input#tour-difficulty.form__input(type='text', required)
+        .form__group.ma-bt-md
+          label.form__label(for='price') Tour Price
+          input#tour-price.form__input(type='number', required)
+        .form__group.ma-bt-md
+          label.form__label(for='duration') Tour Duration
+          input#tour-duration.form__input(type='number', required)
+        .form__group.ma-bt-md
+          label.form__label(for='group-size') Tour Group Size
+          input#tour-groupSize.form__input(type='number', required)
+        .form__group.ma-bt-md
+          label.form__label(for='ratings') Tour Rating
+          input#tour-rating.form__input(type='number', required)
+        .form__group.ma-bt-md
+          label.form__label(for='address') Tour Address
+          input#tour-address.form__input(type='text', required)
+        .form__group.ma-bt-md
+          label.form__label(for='address_desc') Address Description
+          input#address__descrip.form__input(type='text', required)
+        .form__group.ma-bt-md
+          label.form__label(for='coordinates') Tour Coordinates
+          input#tour-coordinates.form__input(type='text', required)
+        .form__group.ma-bt-md
+          label.form__label(for='image-cover') Tour Thumbnail
+          input#tour-coverImg.form__input(type='file', accept= 'image/*',required)
+        .form__group.ma-bt-md
+          label.form__label(for='images') Tour Images (Upload upto 3 images)
+          input#tour-imgs.form__input(type='file', accept= 'image/*',required)
+        // Locations Wrapper
+        .form__group.ma-bt-md
+          label.form__label Tour Locations
+          #locations-wrapper
+          button.btn.btn--green(type='button', id='add-location') Add Location
+
+        .form__group
+          button.btn.btn--green Add Tour

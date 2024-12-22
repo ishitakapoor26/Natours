@@ -20,6 +20,8 @@ router.get("/my-tours", authController.protect, viewController.getMyTours);
 
 router.get("/manage-tours", authController.protect, viewController.manageTours);
 
+router.get("/add-tour", authController.protect, viewController.addTours);
+
 router.get("/my-reviews", authController.protect, viewController.getMyReviews);
 
 router.post(
