@@ -13303,6 +13303,53 @@ var createTour = exports.createTour = /*#__PURE__*/function () {
     return _ref2.apply(this, arguments);
   };
 }();
+exports.deleteBooking = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(deleteBookingIcon, tourId) {
+    var res, tourCard;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.prev = 0;
+          _context3.next = 3;
+          return (0, _axios.default)({
+            method: "DELETE",
+            url: "api/v1/booking/".concat(tourId, "/tour"),
+            data: null
+          });
+        case 3:
+          res = _context3.sent;
+          console.log(res);
+          if (res.status === 204) {
+            (0, _alerts.showAlert)("success", "Booking Deleted Successfully!");
+            // window.setTimeout(() => {
+            //   location.assign("/");
+            // }, 1500);
+            //  Fade out and remove the card
+            tourCard = deleteBookingIcon.closest(".card");
+            if (tourCard) {
+              tourCard.style.transition = "opacity 0.5s";
+              tourCard.style.opacity = "0";
+              setTimeout(function () {
+                tourCard.remove();
+              }, 500);
+            }
+          }
+          _context3.next = 11;
+          break;
+        case 8:
+          _context3.prev = 8;
+          _context3.t0 = _context3["catch"](0);
+          (0, _alerts.showAlert)("error", _context3.t0.response.data.message);
+        case 11:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[0, 8]]);
+  }));
+  return function (_x4, _x5) {
+    return _ref3.apply(this, arguments);
+  };
+}();
 },{"axios":"../../node_modules/axios/index.js","./alerts":"alerts.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -13361,6 +13408,35 @@ document.addEventListener("click", /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }());
+document.addEventListener("click", /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+    var deleteBookingIcon, tourId;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          deleteBookingIcon = e.target.closest("#deleteBooking");
+          if (!deleteBookingIcon) {
+            _context2.next = 7;
+            break;
+          }
+          tourId = deleteBookingIcon.dataset.tourId;
+          console.log("Tour ID:", tourId);
+          if (!tourId) {
+            _context2.next = 7;
+            break;
+          }
+          _context2.next = 7;
+          return (0, _manageTour.deleteBooking)(deleteBookingIcon, tourId);
+        case 7:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2);
+  }));
+  return function (_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}());
 if (mapBox) {
   var locations = JSON.parse(mapBox.dataset.locations);
   (0, _mapbox.displayMap)(locations);
@@ -13394,10 +13470,10 @@ if (logoutBtn) {
 }
 if (updateDataForm) {
   updateDataForm.addEventListener("submit", /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(e) {
       var form;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
           case 0:
             e.preventDefault();
             form = new FormData();
@@ -13405,40 +13481,9 @@ if (updateDataForm) {
             form.append("email", document.getElementById("email").value);
             form.append("photo", document.getElementById("photo").files[0]);
             // console.log(form);
-            _context2.next = 7;
+            _context3.next = 7;
             return (0, _updateSettings.updateSettings)(form, "Account Details");
           case 7:
-          case "end":
-            return _context2.stop();
-        }
-      }, _callee2);
-    }));
-    return function (_x2) {
-      return _ref2.apply(this, arguments);
-    };
-  }());
-}
-if (updatePasswordForm) {
-  updatePasswordForm.addEventListener("submit", /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(e) {
-      var passwordCurrent, password, passwordConfirm;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
-          case 0:
-            e.preventDefault();
-            document.querySelector(".btn--save-password").textContent = "Updating.....";
-            passwordCurrent = document.getElementById("password-current").value;
-            password = document.getElementById("password").value;
-            passwordConfirm = document.getElementById("password-confirm").value;
-            _context3.next = 7;
-            return (0, _updateSettings.updateSettings)({
-              passwordCurrent: passwordCurrent,
-              password: password,
-              passwordConfirm: passwordConfirm
-            }, "password");
-          case 7:
-            document.querySelector(".btn--save-password").textContent = "Save Password";
-          case 8:
           case "end":
             return _context3.stop();
         }
@@ -13449,17 +13494,27 @@ if (updatePasswordForm) {
     };
   }());
 }
-if (bookBtn) {
-  bookBtn.addEventListener("click", /*#__PURE__*/function () {
+if (updatePasswordForm) {
+  updatePasswordForm.addEventListener("submit", /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(e) {
-      var tourId;
+      var passwordCurrent, password, passwordConfirm;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
-            e.target.textContent = "Processing....";
-            tourId = e.target.dataset.tourId;
-            (0, _stripe.bookTour)(tourId);
-          case 3:
+            e.preventDefault();
+            document.querySelector(".btn--save-password").textContent = "Updating.....";
+            passwordCurrent = document.getElementById("password-current").value;
+            password = document.getElementById("password").value;
+            passwordConfirm = document.getElementById("password-confirm").value;
+            _context4.next = 7;
+            return (0, _updateSettings.updateSettings)({
+              passwordCurrent: passwordCurrent,
+              password: password,
+              passwordConfirm: passwordConfirm
+            }, "password");
+          case 7:
+            document.querySelector(".btn--save-password").textContent = "Save Password";
+          case 8:
           case "end":
             return _context4.stop();
         }
@@ -13470,12 +13525,33 @@ if (bookBtn) {
     };
   }());
 }
-if (reviewForm) {
-  reviewForm.addEventListener("submit", /*#__PURE__*/function () {
+if (bookBtn) {
+  bookBtn.addEventListener("click", /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(e) {
-      var submitButton, tourId, review, rating;
+      var tourId;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
+          case 0:
+            e.target.textContent = "Processing....";
+            tourId = e.target.dataset.tourId;
+            (0, _stripe.bookTour)(tourId);
+          case 3:
+          case "end":
+            return _context5.stop();
+        }
+      }, _callee5);
+    }));
+    return function (_x5) {
+      return _ref5.apply(this, arguments);
+    };
+  }());
+}
+if (reviewForm) {
+  reviewForm.addEventListener("submit", /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(e) {
+      var submitButton, tourId, review, rating;
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
           case 0:
             e.preventDefault();
 
@@ -13484,11 +13560,11 @@ if (reviewForm) {
             tourId = submitButton.dataset.tourId; // Fetch from the button's `data-tour-id`
             // console.log("Tour ID:", tourId);
             if (tourId) {
-              _context5.next = 6;
+              _context6.next = 6;
               break;
             }
             console.error("Tour ID is undefined!");
-            return _context5.abrupt("return");
+            return _context6.abrupt("return");
           case 6:
             // Get the review and rating values
             review = document.getElementById("review").value;
@@ -13496,16 +13572,16 @@ if (reviewForm) {
             submitButton.textContent = "Posting Review...";
 
             // Call the addReview function with tourId, review, and rating
-            _context5.next = 11;
+            _context6.next = 11;
             return (0, _review.addReview)(tourId, review, rating);
           case 11:
           case "end":
-            return _context5.stop();
+            return _context6.stop();
         }
-      }, _callee5);
+      }, _callee6);
     }));
-    return function (_x5) {
-      return _ref5.apply(this, arguments);
+    return function (_x6) {
+      return _ref6.apply(this, arguments);
     };
   }());
 }
@@ -13524,10 +13600,10 @@ if (addLocationBtn) {
 }
 if (addTour) {
   addTour.addEventListener("submit", /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(e) {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(e) {
       var locations, startDates, i, coordinates, description, day, _i, date, formData, _iterator, _step, file;
-      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-        while (1) switch (_context6.prev = _context6.next) {
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) switch (_context7.prev = _context7.next) {
           case 0:
             e.preventDefault();
             locations = [];
@@ -13608,12 +13684,12 @@ if (addTour) {
             (0, _manageTour.createTour)(formData);
           case 22:
           case "end":
-            return _context6.stop();
+            return _context7.stop();
         }
-      }, _callee6);
+      }, _callee7);
     }));
-    return function (_x6) {
-      return _ref6.apply(this, arguments);
+    return function (_x7) {
+      return _ref7.apply(this, arguments);
     };
   }());
 }

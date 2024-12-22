@@ -84,3 +84,15 @@ exports.webhookCheckout = (req, res, next) => {
     createBookingCheckout(event.data.object);
   res.status(200).json({ received: true });
 };
+
+exports.deleteBookingsByTourId = catchAsync(async (req, res, next) => {
+  const { tourId } = req.params;
+  const booking = await Booking.findOneAndDelete({ tour: tourId });
+  if (!booking) {
+    return next(new AppError(`No document found with that ID`, 404));
+  }
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});

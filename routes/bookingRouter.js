@@ -24,4 +24,11 @@ router
   .get(bookingController.getBookings)
   .patch(bookingController.updateBookings);
 
+router
+  .route("/:tourId/tour")
+  .delete(
+    authController.restrictTo("admin", "lead-guide"),
+    bookingController.deleteBookingsByTourId
+  );
+
 module.exports = router;

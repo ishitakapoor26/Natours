@@ -24,6 +24,12 @@ router.get("/add-tour", authController.protect, viewController.addTours);
 
 router.get("/update-tour", authController.protect, viewController.updateTours);
 
+router.get(
+  "/manage-bookings",
+  authController.protect,
+  viewController.manageBookings
+);
+
 router.get("/my-reviews", authController.protect, viewController.getMyReviews);
 
 router.post(

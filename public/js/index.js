@@ -4,7 +4,7 @@ import { updateSettings } from "./updateSettings";
 import { bookTour } from "./stripe";
 import { addReview } from "./review";
 import { showAlert } from "./alerts";
-import { deleteTour, createTour } from "./manageTour";
+import { deleteTour, createTour, deleteBooking } from "./manageTour";
 
 // DOM elements
 const mapBox = document.getElementById("map");
@@ -25,6 +25,15 @@ document.addEventListener("click", async (e) => {
     const tourId = deleteIcon.dataset.tourId;
     console.log("Tour ID:", tourId);
     if (tourId) await deleteTour(deleteIcon, tourId);
+  }
+});
+
+document.addEventListener("click", async (e) => {
+  const deleteBookingIcon = e.target.closest("#deleteBooking");
+  if (deleteBookingIcon) {
+    const tourId = deleteBookingIcon.dataset.tourId;
+    console.log("Tour ID:", tourId);
+    if (tourId) await deleteBooking(deleteBookingIcon, tourId);
   }
 });
 

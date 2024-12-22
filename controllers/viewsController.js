@@ -14,6 +14,7 @@ exports.getOverview = catchAsync(async (req, res, next) => {
     title: "Exciting tours for adventurous people",
     tours,
     manageTour: "false",
+    manageBooking: "false",
   });
 });
 
@@ -122,6 +123,7 @@ exports.manageTours = async (req, res, next) => {
     title: "Manage Tours | Admin Portal",
     tours,
     manageTour: "true",
+    manageBooking: "false",
   });
 };
 
@@ -132,3 +134,16 @@ exports.addTours = async (req, res, next) => {
 };
 
 exports.updateTours = async (req, res, next) => {};
+
+exports.manageBookings = async (req, res, next) => {
+  const bookings = await Booking.find();
+  // 2. Find tours with the returned IDs
+  const tourIDs = bookings.map((el) => el.tour);
+  const tours = await Tour.find({ _id: { $in: tourIDs } });
+
+  res.status(200).render("overview", {
+    title: "Admin | Manage Bookings",
+    tours,
+    manageBooking: "true",
+  });
+};

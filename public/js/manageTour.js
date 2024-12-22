@@ -50,3 +50,32 @@ export const createTour = async (data) => {
     showAlert("error", err.response.data.message);
   }
 };
+
+exports.deleteBooking = async (deleteBookingIcon, tourId) => {
+  try {
+    const res = await axios({
+      method: "DELETE",
+      url: `api/v1/booking/${tourId}/tour`,
+      data: null,
+    });
+    console.log(res);
+
+    if (res.status === 204) {
+      showAlert("success", "Booking Deleted Successfully!");
+      // window.setTimeout(() => {
+      //   location.assign("/");
+      // }, 1500);
+      //  Fade out and remove the card
+      const tourCard = deleteBookingIcon.closest(".card");
+      if (tourCard) {
+        tourCard.style.transition = "opacity 0.5s";
+        tourCard.style.opacity = "0";
+        setTimeout(() => {
+          tourCard.remove();
+        }, 500);
+      }
+    }
+  } catch (err) {
+    showAlert("error", err.response.data.message);
+  }
+};
