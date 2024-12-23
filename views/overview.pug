@@ -16,7 +16,7 @@ block content
             h4.card__sub-heading=`${tour.difficulty} ${tour.duration}-day tour`
               - if (user && user.role === 'admin' && (manageTour === 'true' || manageBooking==='true'))
                 span
-                  a(href=`/edit-tour/${tour.id}`, style='text-decoration: none;') 
+                  a(href=`/update-tour/${tour.id}`, style='text-decoration: none;') 
                     svg.card__icon(style='margin: 0px 1rem 0px 2rem;')
                       use(xlink:href='/img/icons.svg#icon-edit')
                   span 

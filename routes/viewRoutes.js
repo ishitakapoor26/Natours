@@ -22,7 +22,11 @@ router.get("/manage-tours", authController.protect, viewController.manageTours);
 
 router.get("/add-tour", authController.protect, viewController.addTours);
 
-router.get("/update-tour", authController.protect, viewController.updateTours);
+router.get(
+  "/update-tour/:tourId",
+  authController.protect,
+  viewController.updateTours
+);
 
 router.get(
   "/manage-bookings",

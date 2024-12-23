@@ -133,7 +133,13 @@ exports.addTours = async (req, res, next) => {
   });
 };
 
-exports.updateTours = async (req, res, next) => {};
+exports.updateTours = async (req, res, next) => {
+  const { tourId } = req.params;
+  res.status(200).render("updateTour", {
+    title: "Manage Tours | Update Tour",
+    tourId,
+  });
+};
 
 exports.manageBookings = async (req, res, next) => {
   const bookings = await Booking.find();

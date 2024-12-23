@@ -79,3 +79,25 @@ exports.deleteBooking = async (deleteBookingIcon, tourId) => {
     showAlert("error", err.response.data.message);
   }
 };
+
+exports.updateTourDetails = async (tourId, data) => {
+  try {
+    for (let [key, value] of data.entries()) {
+      console.log(key, value); // Log all FormData entries
+    }
+    const res = await axios({
+      method: "PATCH",
+      url: `/api/v1/tours/${tourId}`,
+      data,
+    });
+    console.log(res);
+    if (res.status === 201) {
+      window.setTimeout(() => {
+        showAlert("success", "Tour Updated Successfully!");
+        location.assign("/manage-tours");
+      }, 1500);
+    }
+  } catch (err) {
+    showAlert("error", err.response.data.message);
+  }
+};

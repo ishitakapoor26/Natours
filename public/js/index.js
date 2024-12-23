@@ -4,7 +4,12 @@ import { updateSettings } from "./updateSettings";
 import { bookTour } from "./stripe";
 import { addReview } from "./review";
 import { showAlert } from "./alerts";
-import { deleteTour, createTour, deleteBooking } from "./manageTour";
+import {
+  deleteTour,
+  createTour,
+  deleteBooking,
+  updateTourDetails,
+} from "./manageTour";
 
 // DOM elements
 const mapBox = document.getElementById("map");
@@ -18,6 +23,7 @@ const reviewForm = document.querySelector(".form--review");
 const addTour = document.querySelector(".form--createTour");
 const addLocationBtn = document.getElementById("add-location");
 const addDates = document.getElementById("add-dates");
+const updateTour = document.querySelector(".form--updateTour");
 
 document.addEventListener("click", async (e) => {
   const deleteIcon = e.target.closest("#deleteTour");
@@ -147,81 +153,79 @@ if (addLocationBtn) {
     newLocationFields.classList.add("location-fields", "ma-bt-md");
     newLocationFields.innerHTML = `
       <label class="form__label">Tour Coordinates</label>
-      <input class="form__input" type="text" placeholder="Coordinates" id="coordinates-${locationIndex}" required>
+      <input class="form__input" type="text" placeholder="Coordinates" id="coordinates-${locationIndex}">
       <label class="form__label">Location Description</label>
-      <input class="form__input" type="text" placeholder="Description" id="description-${locationIndex}" required>
+      <input class="form__input" type="text" placeholder="Description" id="description-${locationIndex}">
       <label class="form__label">Location Day</label>
-      <input class="form__input" type="number" placeholder="Day" id="day-${locationIndex}" required>
+      <input class="form__input" type="number" placeholder="Day" id="day-${locationIndex}">
     `;
     locationsWrapper.appendChild(newLocationFields);
     locationIndex++;
   });
 }
 
-if (addTour) {
-  addTour.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    let locations = [];
-    let startDates = [];
+// Function to gather locations data
+function gatherLocationsData(locationIndex) {
+  const locations = [];
+  for (let i = 0; i < locationIndex; i++) {
+    const coordinates = document
+      .getElementById(`coordinates-${i}`)
+      .value.split(",")
+      .map((coord) => parseFloat(coord.trim()));
+    const description = document.getElementById(`description-${i}`).value;
+    const day = document.getElementById(`day-${i}`).value;
 
-    // Gather location data
-    for (let i = 0; i < locationIndex; i++) {
-      const coordinates = document
-        .getElementById(`coordinates-${i}`)
-        .value.split(",")
-        .map((coord) => parseFloat(coord.trim()));
-      const description = document.getElementById(`description-${i}`).value;
-      const day = document.getElementById(`day-${i}`).value;
-
-      if (coordinates && description && day) {
-        locations.push({
-          type: "Point", // Ensuring proper geospatial format
-          coordinates: coordinates, // [longitude, latitude]
-          description,
-          day: parseInt(day),
-        });
-      }
+    if (coordinates && description && day) {
+      locations.push({
+        type: "Point",
+        coordinates,
+        description,
+        day: parseInt(day),
+      });
     }
+  }
+  return locations;
+}
 
-    // Gather start dates
-    for (let i = 0; i < dateIndex; i++) {
-      const date = document.getElementById(`dates-${i}`).value;
+// Function to gather start dates
+function gatherStartDates(dateIndex) {
+  const startDates = [];
+  for (let i = 0; i < dateIndex; i++) {
+    const date = document.getElementById(`dates-${i}`).value;
+    if (date) startDates.push(date);
+  }
+  return startDates;
+}
 
-      if (date) {
-        startDates.push(date); // Push directly into the array
-      }
-    }
+// Function to create FormData from the tour form
+function createFormData(locations, startDates) {
+  const formData = new FormData();
+  const fields = [
+    { id: "tour-name", name: "name" },
+    { id: "tour-summary", name: "summary" },
+    { id: "tour-description", name: "description" },
+    { id: "tour-difficulty", name: "difficulty" },
+    { id: "tour-price", name: "price", parse: (value) => parseFloat(value) },
+    {
+      id: "tour-duration",
+      name: "duration",
+      parse: (value) => parseInt(value),
+    },
+    {
+      id: "tour-groupSize",
+      name: "maxGroupSize",
+      parse: (value) => parseInt(value),
+    },
+  ];
 
-    // Debug logs
-    console.log("Locations: ", locations);
-    console.log("Start Dates: ", startDates);
+  // Append basic fields to FormData
+  fields.forEach(({ id, name, parse }) => {
+    const value = document.getElementById(id).value;
+    if (value) formData.append(name, parse ? parse(value) : value);
+  });
 
-    // Prepare FormData for submission
-    const formData = new FormData();
-    formData.append("name", document.getElementById("tour-name").value);
-    formData.append("summary", document.getElementById("tour-summary").value);
-    formData.append(
-      "description",
-      document.getElementById("tour-description").value
-    );
-    formData.append(
-      "difficulty",
-      document.getElementById("tour-difficulty").value.toLowerCase()
-    );
-    formData.append(
-      "price",
-      parseFloat(document.getElementById("tour-price").value)
-    );
-    formData.append(
-      "duration",
-      parseInt(document.getElementById("tour-duration").value)
-    );
-    formData.append(
-      "maxGroupSize",
-      parseInt(document.getElementById("tour-groupSize").value)
-    );
-
-    // Add locations array as individual objects
+  if (locations) {
+    // Append locations data to FormData
     locations.forEach((location, index) => {
       formData.append(`locations[${index}][type]`, location.type);
       formData.append(
@@ -235,32 +239,49 @@ if (addTour) {
       formData.append(`locations[${index}][description]`, location.description);
       formData.append(`locations[${index}][day]`, location.day);
     });
+    // Append startLocation if locations are available
+    if (locations.length > 0) {
+      formData.append("startLocation", JSON.stringify(locations[0]));
+    }
+  }
 
-    // Add startDates array as individual items
+  if (startDates) {
+    // Append start dates to FormData
     startDates.forEach((date, index) => {
       formData.append(`startDates[${index}]`, date);
     });
+  }
 
-    formData.append(
-      "imageCover",
-      document.getElementById("tour-cover-image").files[0]
-    );
-    for (const file of document.getElementById("tour-images").files) {
-      formData.append("images", file); // Append multiple images
-    }
+  // Handle files (cover image and tour images)
+  const imageCover = document.getElementById("tour-cover-image").files[0];
+  if (imageCover) formData.append("imageCover", imageCover);
 
-    formData.append("startLocation", locations[0]);
+  const tourImages = document.getElementById("tour-images").files;
+  if (tourImages.length > 0) {
+    Array.from(tourImages).forEach((file) => formData.append("images", file));
+  }
 
-    // Debug logs to verify FormData
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(key, value);
-    // }
+  return formData;
+}
 
-    // Send the form data
+// Event listener for adding a tour
+if (addTour) {
+  addTour.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const locations = gatherLocationsData(locationIndex);
+    const startDates = gatherStartDates(dateIndex);
+
+    // Debug logs
+    console.log("Locations: ", locations);
+    console.log("Start Dates: ", startDates);
+
+    // Create FormData and send it
+    const formData = createFormData(locations, startDates);
     createTour(formData);
   });
 }
 
+// Event listener for adding dates dynamically
 let dateIndex = 0;
 if (addDates) {
   addDates.addEventListener("click", (e) => {
@@ -269,8 +290,30 @@ if (addDates) {
     const newDatesField = document.createElement("div");
     newDatesField.classList.add("date-fields", "ma-bt-md");
     newDatesField.innerHTML = `<label class="form__label">Tour Dates</label>
-      <input class="form__input" type="date" placeholder="Coordinates" id="dates-${dateIndex}" required>`;
+      <input class="form__input" type="date" placeholder="Coordinates" id="dates-${dateIndex}">`;
     datesWrapper.appendChild(newDatesField);
     dateIndex++;
+  });
+}
+
+// Event listener for updating a tour
+if (updateTour) {
+  updateTour.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const locations = gatherLocationsData(locationIndex);
+    const startDates = gatherStartDates(dateIndex);
+
+    // Debug logs
+    console.log("Locations: ", locations);
+    console.log("Start Dates: ", startDates);
+
+    // Create FormData and send it
+    const formData = createFormData(locations, startDates);
+    const updateBtn = document.getElementById("updateBtn");
+    const tourId = updateBtn.dataset.tourId;
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value); // Log all FormData entries
+    }
+    updateTourDetails(tourId, formData);
   });
 }
